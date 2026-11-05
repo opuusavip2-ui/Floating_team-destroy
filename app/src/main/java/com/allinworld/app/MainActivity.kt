@@ -56,10 +56,11 @@ private fun TeamDestroyApp() {
     if (license.trim() == "TEAM-DESTROY-OPU-MASTER-2026") {
         page = Page.DASHBOARD
         message = ""
-    } else {
+        } else {
         message = "Invalid License Key!"
+    }
 },
-            message = message
+message = message
         )
         Page.DASHBOARD -> DashboardScreen(
             accountCount = accountCount,
