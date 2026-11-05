@@ -53,8 +53,12 @@ private fun TeamDestroyApp() {
             license = license,
             onLicenseChange = { license = it },
             onActivate = {
-                message = "লাইসেন্স যাচাইয়ের জন্য সার্ভার সংযোগ এখনো সেটআপ করা হয়নি"
-            },
+    if (license.trim() == "TEAM-DESTROY-OPU-MASTER-2026") {
+        page = Page.DASHBOARD
+        message = ""
+    } else {
+        message = "Invalid License Key!"
+},
             message = message
         )
         Page.DASHBOARD -> DashboardScreen(
