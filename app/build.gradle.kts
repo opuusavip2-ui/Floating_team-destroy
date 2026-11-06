@@ -1,3 +1,4 @@
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -37,5 +38,9 @@ dependencies {
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.material3:material3")
     implementation("androidx.compose.material:material-icons-extended")
+
+    // Google Authentication
+    implementation("com.google.android.gms:play-services-auth:21.3.0")
+
     debugImplementation("androidx.compose.ui:ui-tooling")
 }
