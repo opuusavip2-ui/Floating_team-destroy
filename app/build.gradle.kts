@@ -17,6 +17,21 @@ android {
         versionName = "1.0.0"
     }
 
+    signingConfigs {
+        create("stable") {
+            storeFile = file("team-destroy.jks")
+            storePassword = System.getenv("SIGNING_KEY_STORE_PASSWORD")
+            keyAlias = System.getenv("SIGNING_KEY_ALIAS")
+            keyPassword = System.getenv("SIGNING_KEY_PASSWORD")
+        }
+    }
+
+    buildTypes {
+        getByName("debug") {
+            signingConfig = signingConfigs.getByName("stable")
+        }
+    }
+
     buildFeatures {
         compose = true
     }
@@ -39,7 +54,6 @@ dependencies {
     implementation("androidx.compose.material3:material3")
     implementation("androidx.compose.material:material-icons-extended")
 
-    // Google Authentication
     implementation("com.google.android.gms:play-services-auth:21.3.0")
 
     debugImplementation("androidx.compose.ui:ui-tooling")
