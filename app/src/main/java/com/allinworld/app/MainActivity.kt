@@ -1,6 +1,12 @@
 
 package com.allinworld.app
 
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import org.json.JSONObject
+import java.net.HttpURLConnection
+import java.net.URL
 import android.os.Bundle
 import android.app.Activity
 import androidx.activity.ComponentActivity
@@ -60,6 +66,8 @@ private fun TeamDestroyApp() {
     var gmailAccessToken by remember { mutableStateOf<String?>(null) }
     var accountCount by remember { mutableIntStateOf(0) }
     var floatingRunning by remember { mutableStateOf(false) }
+    var connectedGmail by remember { mutableStateOf("") }
+    val scope = rememberCoroutineScope()
     var message by remember { mutableStateOf("") }
 
     when (page) {
@@ -644,6 +652,40 @@ private fun ConnectGmailScreen(
                     color = Color.Gray
                 )
             }
+        }
+    }
+}
+private suspend fun fetchGoogleEmail(token: String): String? {
+    return withContext(Dispatchers.IO) {
+        var connection: HttpURLConnection? = null
+
+        try {
+            connection = URL(
+                "https://www.googleapis.com/oauth2/v2/userinfo"
+            ).openConnection() as HttpURLConnection
+
+            connection.requestMethod = "GET"
+            connection.setRequestProperty(
+                "Authorization",
+                "Bearer $token"
+            )
+            connection.connectTimeout = 15000
+            connection.readTimeout = 15000
+
+            if (connection.responseCode == 200) {
+                val response = connection.inputStream
+                    .bufferedReader()
+                    .use { it.readText() }
+
+                JSONObject(response).optString("email")
+                    .takeIf { it.isNotBlank() }
+            } else {
+                null
+            }
+        } catch (e: Exception) {
+            null
+        } finally {
+            connection?.disconnect()
         }
     }
 }
